@@ -1,14 +1,5 @@
 import { cn } from "@/lib/utils";
-
-export interface Message {
-  id: string;
-  sender: string;
-  content: string;
-  type: 'moderator' | 'kid';
-  avatar: string;
-  timestamp: string;
-  kidIndex?: number; // For different color bubbles
-}
+import { Message } from "@/types/discussion";
 
 interface ChatMessageProps {
   message: Message;
@@ -20,7 +11,7 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
       return 'bg-moderator-bubble text-white';
     }
     
-    // Cycle through different kid bubble colors
+    // Cycle through different participant bubble colors
     const colors = [
       'bg-kid-bubble-1 text-foreground',
       'bg-kid-bubble-2 text-white',

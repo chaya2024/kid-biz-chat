@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import ChatMessage, { Message } from "./ChatMessage";
-import { sessionScript } from "@/data/sessionScript";
+import ChatMessage from "./ChatMessage";
+import { DiscussionTopic, Message, FlowStep } from "@/types/discussion";
 
 interface ChatInterfaceProps {
+  topic: DiscussionTopic;
   onBack: () => void;
 }
 
-const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
+const ChatInterface = ({ topic, onBack }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -22,26 +23,30 @@ const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
     scrollToBottom();
   }, [messages]);
 
-  // Initialize with welcome message
+  // Initialize with topic flow
   useEffect(() => {
-    const welcomeMessage: Message = {
-      id: '1',
-      sender: 'Captain AI',
-      content: sessionScript.introduction,
-      type: 'moderator',
-      avatar: '🤖',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-    setMessages([welcomeMessage]);
-  }, []);
+    if (topic.flow.length > 0) {
+      const initialMessage: Message = {
+        id: '1',
+        sender: topic.flow[0].sender,
+        content: topic.flow[0].content,
+        type: topic.flow[0].type,
+        avatar: topic.flow[0].avatar,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        kidIndex: topic.flow[0].kidIndex
+      };
+      setMessages([initialMessage]);
+    }
+  }, [topic]);
 
   const handleNextMessage = () => {
-    if (currentStep >= sessionScript.flow.length) return;
+    if (currentStep >= topic.flow.length - 1) return;
     
     setIsProcessing(true);
     
     setTimeout(() => {
-      const currentFlow = sessionScript.flow[currentStep];
+      const nextStep = currentStep + 1;
+      const currentFlow = topic.flow[nextStep];
       const newMessage: Message = {
         id: Date.now().toString(),
         sender: currentFlow.sender,
@@ -53,12 +58,12 @@ const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
       };
       
       setMessages(prev => [...prev, newMessage]);
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep(nextStep);
       setIsProcessing(false);
     }, 1000);
   };
 
-  const isComplete = currentStep >= sessionScript.flow.length;
+  const isComplete = currentStep >= topic.flow.length - 1;
 
   return (
     <div className="min-h-screen bg-gradient-ocean flex flex-col">
@@ -70,13 +75,13 @@ const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
               ← Back
             </Button>
             <div>
-              <h1 className="font-bold text-lg">🏝️ Island Adventure Chat</h1>
-              <p className="text-sm text-muted-foreground">6 young entrepreneurs + AI guide</p>
+              <h1 className="font-bold text-lg">{topic.title}</h1>
+              <p className="text-sm text-muted-foreground">{topic.scenario}</p>
             </div>
           </div>
           
           <div className="text-sm text-muted-foreground">
-            Step {Math.min(currentStep + 1, sessionScript.flow.length + 1)} of {sessionScript.flow.length + 1}
+            שלב {currentStep + 1} מתוך {topic.flow.length}
           </div>
         </div>
       </div>
