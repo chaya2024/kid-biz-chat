@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      discussion_topics: {
+        Row: {
+          created_at: string
+          description: string | null
+          flow: Json
+          id: string
+          is_active: boolean
+          scenario: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          flow: Json
+          id?: string
+          is_active?: boolean
+          scenario: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          flow?: Json
+          id?: string
+          is_active?: boolean
+          scenario?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
