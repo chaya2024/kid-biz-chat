@@ -52,6 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Tropical island chat colors
+				'chat-bg': 'hsl(var(--chat-bg))',
+				'moderator-bubble': 'hsl(var(--moderator-bubble))',
+				'kid-bubble-1': 'hsl(var(--kid-bubble-1))',
+				'kid-bubble-2': 'hsl(var(--kid-bubble-2))',
+				'kid-bubble-3': 'hsl(var(--kid-bubble-3))',
+				'kid-bubble-4': 'hsl(var(--kid-bubble-4))',
+				'kid-bubble-5': 'hsl(var(--kid-bubble-5))',
+				'kid-bubble-6': 'hsl(var(--kid-bubble-6))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,6 +71,11 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-tropical': 'var(--gradient-tropical)',
+				'gradient-sunset': 'var(--gradient-sunset)',
+				'gradient-ocean': 'var(--gradient-ocean)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
