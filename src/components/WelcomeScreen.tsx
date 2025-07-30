@@ -33,12 +33,22 @@ const WelcomeScreen = ({ onStart }: WelcomeScreenProps) => {
           </div>
         </div>
         
-        <Button 
-          onClick={onStart}
-          className="w-full text-lg py-6 bg-gradient-tropical hover:scale-105 transition-transform duration-200"
-        >
-          🚀 Start Adventure
-        </Button>
+        <div className="space-y-3">
+          <Button 
+            onClick={onStart}
+            className="w-full text-lg py-6 bg-gradient-tropical hover:scale-105 transition-transform duration-200"
+          >
+            🚀 התחל הרפתקה
+          </Button>
+          
+          <Button 
+            onClick={onStart}
+            variant="outline"
+            className="w-full text-lg py-4 hover:scale-105 transition-transform duration-200"
+          >
+            👥 צפה במשתתפים ונושאים
+          </Button>
+        </div>
       </Card>
     </div>
   );
