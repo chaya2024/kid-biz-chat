@@ -37,25 +37,22 @@ const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
     setMessages([welcomeMessage]);
   }, []);
 
-  const handleNextMessage = () => {
-    if (currentStep >= sessionScript.flow.length) return;
-    
+  const handleParticipantMessage = (participantIndex: number) => {
     setIsProcessing(true);
     
     setTimeout(() => {
-      const currentFlow = sessionScript.flow[currentStep];
+      const participant = participantIndex === -1 ? moderator : participants[participantIndex];
       const newMessage: Message = {
         id: Date.now().toString(),
-        sender: currentFlow.sender,
-        content: currentFlow.content,
-        type: currentFlow.type,
-        avatar: currentFlow.avatar,
+        sender: participant.name,
+        content: `היי! אני ${participant.name}. ${participant.description}`,
+        type: participantIndex === -1 ? 'moderator' : 'kid',
+        avatar: participant.avatar,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        kidIndex: currentFlow.kidIndex
+        kidIndex: participantIndex >= 0 ? participantIndex : undefined
       };
       
       setMessages(prev => [...prev, newMessage]);
-      setCurrentStep(prev => prev + 1);
       setIsProcessing(false);
     }, 1000);
   };
@@ -136,35 +133,45 @@ const ChatInterface = ({ onBack }: ChatInterfaceProps) => {
             
             {/* Controls */}
             <div className="p-4 bg-white/90 backdrop-blur-sm border-t border-border">
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
-                  {isComplete ? (
-                    "🎉 ההרפתקה הושלמה! עבודת צוות מעולה!"
-                  ) : isProcessing ? (
-                    "⌨️ מישהו כותב..."
-                  ) : (
-                    "לחצו הבא כדי להמשיך בהרפתקה..."
-                  )}
-                </div>
+              <div className="text-center mb-4">
+                <p className="text-sm text-muted-foreground mb-3">
+                  {isProcessing ? "⌨️ מישהו כותב..." : "בחר מי ירצה להגיב:"}
+                </p>
                 
-                {!isComplete && (
-                  <Button 
-                    onClick={handleNextMessage}
-                    disabled={isProcessing}
-                    className="bg-gradient-tropical hover:scale-105 transition-transform duration-200"
-                  >
-                    {isProcessing ? "⏳ המתן..." : "➡️ הודעה הבאה"}
-                  </Button>
+                {!isProcessing && (
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {/* Moderator Button */}
+                    <Button 
+                      onClick={() => handleParticipantMessage(-1)}
+                      variant="outline"
+                      className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20 hover:bg-primary/20"
+                    >
+                      {moderator.avatar} {moderator.name}
+                    </Button>
+                    
+                    {/* Participants Buttons */}
+                    {participants.map((participant, index) => (
+                      <Button 
+                        key={participant.id}
+                        onClick={() => handleParticipantMessage(index)}
+                        variant="outline"
+                        className="hover:bg-muted/50"
+                      >
+                        {participant.avatar} {participant.name}
+                      </Button>
+                    ))}
+                  </div>
                 )}
                 
-                {isComplete && (
+                <div className="mt-4">
                   <Button 
                     onClick={onBack}
+                    variant="outline"
                     className="bg-gradient-sunset hover:scale-105 transition-transform duration-200"
                   >
                     🔄 התחל הרפתקה חדשה
                   </Button>
-                )}
+                </div>
               </div>
             </div>
           </div>
